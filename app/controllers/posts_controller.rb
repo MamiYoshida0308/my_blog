@@ -3,7 +3,10 @@ class PostsController < ApplicationController
   
   def index
     # 記事一覧用
-    @posts = Post.order(created_at: :desc)
+
+    @q = Post.order(created_at: :desc).ransack(params[:q])
+    @posts = @q.result.page(params[:page]).per(2)
+
     # 最新記事用
     @new_posts = Post.order(created_at: :desc).limit(5)
     @author = Author.first
